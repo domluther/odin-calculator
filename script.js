@@ -47,26 +47,39 @@ buttonsContainer.addEventListener("click", (e) => {
     handleDigit(btn.textContent);
     return;
   }
-  // clear button pressed
-  if (dataset.function === "clear") {
-    clearDisplay();
-    updateDisplay();
-  }
 
-  if (dataset.function === "allClear") {
-    resetCalcuator();
-    updateDisplay();
-  }
-
-  // an operator pressed
   if (btn.classList.contains("operator")) {
     handleOperator(dataset.function);
+    return;
   }
 
   if (btn.classList.contains("equals")) {
     // Calculation 'finished' so clear operator
     equalsPressed();
     calculator.operator = null;
+    return;
+  }
+
+  if (dataset.function === "allClear") {
+    resetCalcuator();
+    updateDisplay();
+    return;
+  }
+
+  if (dataset.function === "plusMinus") {
+    calculator.displayValue =
+      calculator.displayValue.charAt(0) === "-"
+        ? calculator.displayValue.slice(1)
+        : "-" + calculator.displayValue;
+    updateDisplay();
+    return;
+  }
+
+  // clear button pressed
+  if (dataset.function === "clear") {
+    clearDisplay();
+    updateDisplay();
+    return;
   }
 });
 
@@ -97,7 +110,7 @@ const equalsPressed = () => {
     calculator.num2
   );
   if (Number.isFinite(solution)) displaySolution(solution);
-  else calculator.displayValue = "no thanks";
+  else calculator.displayValue = "Not a number";
   updateDisplay();
 };
 
