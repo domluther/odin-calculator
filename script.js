@@ -56,6 +56,7 @@ buttonsContainer.addEventListener("click", (e) => {
 
   // an operator pressed
   if (btn.classList.contains("operator")) {
+    if (calculator.operator) equalsPressed();
     console.log(dataset.function);
     // Store the first number
     calculator.num1 = calculator.displayValue;
@@ -64,20 +65,31 @@ buttonsContainer.addEventListener("click", (e) => {
   }
 
   if (btn.classList.contains("equals")) {
-    console.log("hmm");
-    calculator.num2 = calculator.displayValue;
-    // need to
-    setDisplayValue(
-      operate(calculator.num1, calculator.operator, calculator.num2)
-    );
-    updateDisplay();
+    equalsPressed();
+    // Calculation 'finished' so clear operator
+    calculator.operator = null;
   }
 });
 
-const setDisplayValue = (num) => {
+// used to display the answer
+const displaySolution = (num) => {
   // Set to max of 6 dp, convert to a number to chop trailing 0s and then back to a string as that's how I'm storing
   calculator.displayValue = String(+num.toFixed(calculator.maxDP));
 };
+
+const equalsPressed = () => {
+  calculator.num2 = calculator.displayValue;
+  const solution = operate(
+    calculator.num1,
+    calculator.operator,
+    calculator.num2
+  );
+  if (Number.isFinite(solution)) displaySolution(solution);
+  else calculator.displayValue = "no thanks";
+  updateDisplay();
+};
+
+// used when typing in a number
 const updateDisplayValue = (num) => {
   // Max of 1 . in a number
   if (num === ".") {
