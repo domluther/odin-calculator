@@ -1,6 +1,12 @@
 // Store calculator state/model centrally. Ease of access
 const calculator = {
   maxDP: 6,
+  operatorLookup: {
+    "+": "add",
+    "-": "subtract",
+    "*": "multiply",
+    "/": "divide",
+  },
 };
 
 const calculatorEle = document.querySelector(".calculator");
@@ -38,9 +44,7 @@ buttonsContainer.addEventListener("click", (e) => {
   // A button has been pressed - if it's a number, append the value to the displayed value
   const dataset = btn.dataset;
   if (dataset.function === "num") {
-    console.log(btn);
-    updateDisplayValue(btn.textContent);
-    updateDisplay();
+    handleDigit(btn.textContent);
     return;
   }
   // clear button pressed
@@ -56,17 +60,12 @@ buttonsContainer.addEventListener("click", (e) => {
 
   // an operator pressed
   if (btn.classList.contains("operator")) {
-    if (calculator.operator) equalsPressed();
-    console.log(dataset.function);
-    // Store the first number
-    calculator.num1 = calculator.displayValue;
-    clearDisplay();
-    calculator.operator = dataset.function;
+    handleOperator(dataset.function);
   }
 
   if (btn.classList.contains("equals")) {
-    equalsPressed();
     // Calculation 'finished' so clear operator
+    equalsPressed();
     calculator.operator = null;
   }
 });
@@ -75,6 +74,19 @@ buttonsContainer.addEventListener("click", (e) => {
 const displaySolution = (num) => {
   // Set to max of 6 dp, convert to a number to chop trailing 0s and then back to a string as that's how I'm storing
   calculator.displayValue = String(+num.toFixed(calculator.maxDP));
+};
+
+const handleDigit = (digit) => {
+  updateDisplayValue(digit);
+  updateDisplay();
+};
+
+const handleOperator = (operator) => {
+  if (calculator.operator) equalsPressed();
+  // Store the first number
+  calculator.num1 = calculator.displayValue;
+  clearDisplay();
+  calculator.operator = operator;
 };
 
 const equalsPressed = () => {
@@ -125,5 +137,33 @@ const resetCalcuator = () => {
   calculator.displayValue = "0";
   calculator.firstNum = false;
 };
+
+window.addEventListener("keypress", function (e) {
+  const digits = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
+  const operators = ["/", "*", "-", "+"];
+
+  e.preventDefault();
+  if (digits.includes(e.key)) {
+    handleDigit(e.key);
+    return;
+  }
+
+  if (operators.includes(e.key)) {
+    handleOperator(calculator.operatorLookup[e.key]);
+    return;
+  }
+
+  if (e.key === "Enter") {
+    equalsPressed();
+    calculator.operator = null;
+    return;
+  }
+
+  if (e.key === "c") {
+    clearDisplay();
+    updateDisplay();
+    return;
+  }
+});
 
 init();
