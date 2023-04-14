@@ -1,5 +1,7 @@
 // Store calculator state/model centrally. Ease of access
-const calculator = {};
+const calculator = {
+  maxDP: 6,
+};
 
 const calculatorEle = document.querySelector(".calculator");
 const buttonsContainer = document.querySelector(".buttons");
@@ -73,9 +75,18 @@ buttonsContainer.addEventListener("click", (e) => {
 });
 
 const setDisplayValue = (num) => {
-  calculator.displayValue = num;
+  // Set to max of 6 dp, convert to a number to chop trailing 0s and then back to a string as that's how I'm storing
+  calculator.displayValue = String(+num.toFixed(calculator.maxDP));
 };
 const updateDisplayValue = (num) => {
+  // Max of 1 . in a number
+  if (num === ".") {
+    calculator.displayValue = calculator.displayValue.includes(".")
+      ? calculator.displayValue
+      : (calculator.displayValue += num);
+    return;
+  }
+  // fixes displayValue being empty and numbers not starting with a 0 (unless a decimal)
   calculator.displayValue =
     calculator.displayValue === "0" ? num : (calculator.displayValue += num);
 };
@@ -102,3 +113,5 @@ const resetCalcuator = () => {
   calculator.displayValue = "0";
   calculator.firstNum = false;
 };
+
+init();
