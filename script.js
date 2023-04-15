@@ -166,7 +166,6 @@ window.addEventListener("keydown", function (e) {
   const digits = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."];
   const operators = ["/", "*", "-", "+"];
 
-  e.preventDefault();
   if (digits.includes(e.key)) {
     handleDigit(e.key);
     return;

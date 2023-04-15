@@ -7,10 +7,15 @@
 body {
   background-color: darkgrey;
   font-family: Helvetica;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 .calculator {
   width: 600px;
+  height: 480px;
   background-color: #040404;
 }
 
