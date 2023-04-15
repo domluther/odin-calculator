@@ -121,6 +121,7 @@ buttonsContainer.addEventListener("click", (e) => {
   const dataset = btn.dataset;
 
   if (dataset.function === "num") {
+    console.log(btn.style);
     handleDigit(btn.textContent);
     return;
   }

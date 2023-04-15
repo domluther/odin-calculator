@@ -64,3 +64,7 @@ body {
 .button.number.double {
   flex-grow: 2;
 }
+
+.button:hover {
+  filter: brightness(1.25);
+}
